@@ -1,0 +1,16 @@
+﻿body {
+}
+
+.register_body .form-group {
+    margin-left: 55px;
+}
+
+.register_header {
+    text-align: center;
+    font-size: 25px;
+}
+
+.login_header{
+    font-size: 25px;
+    text-align: center;
+}

@@ -1,0 +1,208 @@
+﻿
+@{
+    ViewBag.Title = "User Profile";
+}
+
+<nav class="navbar navbar-light bg-light navbar-header">
+    <div class="offset-md-8 col-md-4">
+        <a class="btn btn-group-sm btn-info" href="@Url.Action("Home","Authentication")">Home</a>
+        <a class="btn btn-group-sm btn-info" href="@Url.Action("UserProfile","Authentication")">Update Profile</a>
+        <a class="btn btn-group-sm btn-danger" href="@Url.Action("Logout","Authentication")">LogOut</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row" style="margin-top: 25px;">
+        <input type="hidden" id="email" value="@Session["Email"].ToString()">
+            <div class="offset-md-3 col-md-6 user-profile-card" style="box-shadow: 1px 1px #888888;">
+                <h3>User Profile</h3>
+                <div class="form-horizontal" role="form">
+
+                    <div class="form-group">
+                        <label for="profile_photo"> Profile Picture: </label>
+                        <div>
+                            <label for="profile_photo">
+                                <img id="profile_photo_source" style="width: 210px;height:126px;border: 1px solid #ddd;padding:3px;cursor:pointer;">
+                                <i class="fa fa-plus" id="upload_icon" style="position: relative; top: 0px;left: -120px;"></i>
+                                <input type="file" id="profile_photo" style="display:none">
+                            </label>
+
+                            <input type="hidden" id="profile_photo_value" value="">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address"> Address: </label>
+                        <input type="text" name="address" id="address" class="form-control address" value="" maxlength="100" placeholder="Address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone_number"> Phone Number: </label>
+                        <input type="text" name="phone_number" id="phone_number" class="form-control phone_number" value="" maxlength="15" placeholder="phone number" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mobile"> Mother Name: </label>
+                        <input type="text" name="mobile" id="mobile" class="form-control mobile" value="" maxlength="15" placeholder="mobile" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profession"> Profession: </label>
+                        <input type="text" name="profession" id="profession" class="form-control profession" value="" maxlength="100" placeholder="profession" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="website"> Website: </label>
+                        <input type="text" name="website" id="website" class="form-control website" value="" maxlength="100" placeholder="www.example.com" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="github"> Github: </label>
+                        <input type="text" name="github" id="github" class="form-control github" value="" maxlength="100" placeholder="github username" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="facebook"> Facebook: </label>
+                        <input type="text" name="facebook" id="facebook" class="form-control facebook" value="" maxlength="100" placeholder="facebook username" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="twitter"> Twitter: </label>
+                        <input type="text" name="twitter" id="twitter" class="form-control twitter" value="" maxlength="100" placeholder="twitter username" autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="instagram"> Instagram: </label>
+                        <input type="text" name="instagram" id="instagram" class="form-control instagram" value="" maxlength="100" placeholder="instagram username" autocomplete="off">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" id="saveUserInfo"><i class="fa fa-check-square-o"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+
+
+<script>
+    function readImageFile() {
+
+        if (this.files && this.files[0]) {
+
+            var FR = new FileReader();
+
+            FR.addEventListener("load", function (e) {
+                document.getElementById("profile_photo_source").src = e.target.result;
+                document.getElementById("profile_photo_value").value = e.target.result;
+                $('#upload_icon').hide();
+            });
+
+            FR.readAsDataURL(this.files[0]);
+        }
+    }
+
+    document.getElementById("profile_photo").addEventListener("change", readImageFile);
+</script>
+
+<script>
+    $("#saveUserInfo").click(function () {
+        var email = $('#email').val();
+        var address = $('#address').val();
+        var phone_number = $('#phone_number').val();
+        var mobile = $('#mobile').val();
+        var profession = $('#profession').val();
+        var website = $('#website').val();
+        var github = $('#github').val();
+        var facebook = $('#facebook').val();
+        var twitter = $('#twitter').val();
+        var instagram = $('#instagram').val();
+        var profilePhoto = $('#profile_photo_value').val();
+
+
+        if (address == '') {
+            alert('Address field is empty !!');
+        }
+        else if (phone_number == '') {
+            alert('Phone number field is empty !!');
+        }
+        else if (phone_number.length != 11) {
+            alert('Please put 11 digit valid phone number !!');
+        }
+        else if (mobile == '') {
+            alert('Mobile  field is empty !!');
+        }
+        else if (mobile.length != 11) {
+            alert('Please put 11 digit valid mobile number !!');
+        }
+        else if (profession == '') {
+            alert('Profession field is empty !!');
+        }
+        else if (website == '') {
+            alert('Website number field is empty !!');
+        }
+        else if (github == '') {
+            alert('Github field is empty !!');
+        }
+        else if (facebook == '') {
+            alert('Facebook field is empty !!');
+        }
+        else if (twitter == '') {
+            alert('Twitter field is empty  !!');
+        }
+        else if (instagram == '') {
+            alert('Instagram field is empty !!');
+        }
+        else if (profilePhoto == '') {
+            alert('Profile photo field is empty !!');
+        }
+        else {
+            //ajax passing data to controller
+            $.ajax({
+                url: '/Authentication/SaveUserProfile',
+                type: 'POST',
+                dataType: "json",
+                traditional: true,
+                data: {
+                    'email': email,
+                    'address': address,
+                    'phone_number': phone_number,
+                    'mobile': mobile,
+                    'profession': profession,
+                    'website': website,
+                    'github': github,
+                    'facebook': facebook,
+                    'twitter': twitter,
+                    'instagram': instagram,
+                    'profilePhoto': profilePhoto
+                },
+                success: function (result) {
+                    toastr.success("Successfull", "Successfully Updated");
+                    reset();
+                },
+                error: function () {
+                    toastr.error("error", "error occured");
+                }
+            });
+        }
+
+    });
+
+    function reset() {
+        document.getElementById("email").value = "";
+        document.getElementById("address").value = "";
+        document.getElementById("phone_number").value = "";
+        document.getElementById("mobile").value = "";
+        document.getElementById("profession").value = "";
+        document.getElementById("website").value = "";
+        document.getElementById("github").value = "";
+        document.getElementById("facebook").value = "";
+        document.getElementById("twitter").value = "";
+        document.getElementById("instagram").value = "";
+        document.getElementById("profile_photo_value").value = "";
+        document.getElementById("profile_photo_source").src = "";
+    }
+</script> 
